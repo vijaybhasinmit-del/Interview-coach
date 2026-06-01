@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11806.211 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewCoach", "InterviewCoach.csproj", "{493E383A-626B-0C61-3E12-FF8F6191E01D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C812D336-A5FB-4307-8061-5C784E649CAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{493E383A-626B-0C61-3E12-FF8F6191E01D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{493E383A-626B-0C61-3E12-FF8F6191E01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{493E383A-626B-0C61-3E12-FF8F6191E01D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{493E383A-626B-0C61-3E12-FF8F6191E01D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E5EFB95-4B23-499B-9B08-E49AB3D08EE9}
+	EndGlobalSection
+EndGlobal

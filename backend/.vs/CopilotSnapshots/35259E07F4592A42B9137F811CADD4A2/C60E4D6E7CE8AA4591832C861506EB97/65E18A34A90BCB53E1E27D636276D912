@@ -1,0 +1,190 @@
+﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
+using InterviewCoach.Models;
+
+namespace InterviewCoach.Services;
+
+/// <summary>
+/// Interview Agent — powered by Google Gemini 1.5 Flash (free API).
+/// Handles system prompt construction, conversation history,
+/// question generation, answer evaluation, and scorecard parsing.
+/// </summary>
+public class ClaudeService   // name kept so controller injection is unchanged
+{
+    private readonly HttpClient _http;
+    private readonly IConfiguration _config;
+    // Use a supported model name from the Models list (no leading "models/" prefix
+    // because ApiUrl inserts the models/ segment). gemini-2.5-flash supports generateContent.
+    private const string MODEL = "gemini-2.5-flash";
+
+    // Key injected as query param — Gemini uses ?key= not a header
+    private string ApiUrl => 
+        $"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={_apiKey}";
+
+    private readonly string _apiKey;
+
+    private static readonly JsonSerializerOptions _jsonOpts = new()
+    {
+        PropertyNamingPolicy        = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition      = JsonIgnoreCondition.WhenWritingNull,
+        PropertyNameCaseInsensitive = true
+    };
+
+    public ClaudeService(HttpClient http, IConfiguration config)
+    {
+        _http   = http;
+        _config = config;
+        _apiKey = _config["Gemini:ApiKey"]
+            ?? throw new InvalidOperationException(
+                "Gemini:ApiKey not found. Add it to appsettings.json.");
+    }
+
+    // ── System Prompt ──────────────────────────────────────────────────────────
+
+    private static string BuildSystemPrompt(InterviewSession session) => $@"You are an expert technical interviewer conducting a mock interview.
+Candidate name: {session.CandidateName}
+
+=== RESUME ===
+{session.Resume}
+
+=== JOB DESCRIPTION ===
+{session.JobDescription}
+
+=== STRICT RULES ===
+- Ask exactly ONE question per turn (technical, behavioral, or situational).
+- After each candidate answer give exactly 2 lines of feedback:
+    ✅ Good: <what was good>
+    ⚠️ Improve: <what was missing or could be better>
+- Then immediately ask the NEXT question on a new line.
+- After evaluating the 5th answer, output the single token INTERVIEW_COMPLETE on its own line,
+  then output a JSON scorecard inside a ```json block with this exact shape:
+{{
+  ""overall"": <1-10>,
+  ""categories"": {{
+    ""Technical Depth"": <1-10>,
+    ""Communication"": <1-10>,
+    ""Problem Solving"": <1-10>,
+    ""Relevance to JD"": <1-10>
+  }},
+  ""strengths"": [""..."", ""...""],
+  ""improvements"": [""..."", ""...""],
+  ""verdict"": ""one-line summary""
+}}
+- Be tough but fair. Tailor every question to the resume and JD.
+- Do NOT repeat questions.";
+
+    // ── Public Methods ─────────────────────────────────────────────────────────
+
+    public async Task<string> GetFirstQuestionAsync(InterviewSession session)
+    {
+        var userMsg = new GeminiMessage("user",
+            new List<GeminiPart> { new("Start the interview. Greet me briefly and ask your first question.") });
+
+        var response = await CallGeminiAsync(session, new List<GeminiMessage> { userMsg });
+
+        session.History.Add(userMsg);
+        session.History.Add(new GeminiMessage("model",
+            new List<GeminiPart> { new(response) }));
+        session.QuestionNumber = 1;
+
+        return response;
+    }
+
+    public async Task<(string RawResponse, bool IsComplete, ScoreCard? Card)>
+        EvaluateAnswerAsync(InterviewSession session, string answer)
+    {
+        var userMsg = new GeminiMessage("user",
+            new List<GeminiPart> { new(answer) });
+
+        session.History.Add(userMsg);
+
+        var response = await CallGeminiAsync(session, session.History);
+
+        session.History.Add(new GeminiMessage("model",
+            new List<GeminiPart> { new(response) }));
+        session.QuestionNumber++;
+
+        var isComplete = response.Contains("INTERVIEW_COMPLETE");
+        ScoreCard? card = isComplete ? TryParseScoreCard(response) : null;
+
+        return (response, isComplete, card);
+    }
+
+    // ── Private Helpers ────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Call the Models list endpoint so callers can inspect available models and
+    /// which methods they support (useful for choosing a model that supports generateContent).
+    /// Returns the raw JSON response from the API.
+    /// </summary>
+    public async Task<string> ListModelsAsync()
+    {
+        var url = $"https://generativelanguage.googleapis.com/v1beta/models?key={_apiKey}";
+        var resp = await _http.GetAsync(url);
+        var body = await resp.Content.ReadAsStringAsync();
+        if (!resp.IsSuccessStatusCode)
+            throw new Exception($"Model list API error {resp.StatusCode}: {body}");
+
+        return body;
+    }
+
+    private async Task<string> CallGeminiAsync(
+        InterviewSession session,
+        List<GeminiMessage> messages)
+    {
+        var payload = new GeminiRequest(
+            Contents: messages,
+            SystemInstruction: new GeminiSystemInstruction(
+                new List<GeminiPart> { new(BuildSystemPrompt(session)) }),
+            GenerationConfig: new GeminiGenerationConfig(
+                MaxOutputTokens: 1024,
+                Temperature: 0.7)
+        );
+
+        var json    = JsonSerializer.Serialize(payload, _jsonOpts);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var httpResponse = await _http.PostAsync(ApiUrl, content);
+
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            var err = await httpResponse.Content.ReadAsStringAsync();
+            throw new Exception($"Gemini API error {httpResponse.StatusCode}: {err}");
+        }
+
+        var body   = await httpResponse.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize<GeminiResponse>(body, _jsonOpts);
+
+        return result?.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text
+            ?? throw new Exception("Empty response from Gemini");
+    }
+
+    private static ScoreCard? TryParseScoreCard(string raw)
+    {
+        try
+        {
+            var match = Regex.Match(raw, @"```json\s*([\s\S]*?)\s*```");
+            if (!match.Success) return null;
+
+            var doc  = JsonDocument.Parse(match.Groups[1].Value);
+            var root = doc.RootElement;
+
+            var categories = new Dictionary<string, int>();
+            foreach (var cat in root.GetProperty("categories").EnumerateObject())
+                categories[cat.Name] = cat.Value.GetInt32();
+
+            return new ScoreCard(
+                Overall:      root.GetProperty("overall").GetInt32(),
+                Categories:   categories,
+                Strengths:    root.GetProperty("strengths")
+                                  .EnumerateArray().Select(x => x.GetString()!).ToList(),
+                Improvements: root.GetProperty("improvements")
+                                  .EnumerateArray().Select(x => x.GetString()!).ToList(),
+                Verdict:      root.GetProperty("verdict").GetString()!
+            );
+        }
+        catch { return null; }
+    }
+}

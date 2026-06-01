@@ -1,0 +1,71 @@
+﻿namespace InterviewCoach.Models;
+
+// ── Session Setup ──────────────────────────────────────────
+public record StartSessionRequest(
+    string Resume,
+    string JobDescription,
+    string CandidateName
+);
+
+public record StartSessionResponse(
+    string SessionId,
+    string FirstQuestion,
+    int TotalQuestions
+);
+
+// ── Answer Submission ──────────────────────────────────────
+public record SubmitAnswerRequest(
+    string SessionId,
+    string Answer
+);
+
+public record SubmitAnswerResponse(
+    string Feedback,
+    string? NextQuestion,
+    int QuestionNumber,
+    int TotalQuestions,
+    bool IsComplete,
+    ScoreCard? ScoreCard
+);
+
+// ── Final Scorecard ────────────────────────────────────────
+public record ScoreCard(
+    int Overall,
+    Dictionary<string, int> Categories,
+    List<string> Strengths,
+    List<string> Improvements,
+    string Verdict
+);
+
+// ── Internal Session State ─────────────────────────────────
+public class InterviewSession
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Resume { get; set; } = "";
+    public string JobDescription { get; set; } = "";
+    public string CandidateName { get; set; } = "";
+    // Gemini uses role: "user" | "model"
+    public List<GeminiMessage> History { get; set; } = new();
+    public int QuestionNumber { get; set; } = 0;
+    public int TotalQuestions { get; set; } = 5;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+}
+
+// ── Gemini API DTOs ────────────────────────────────────────
+
+// Request
+public record GeminiRequest(
+    List<GeminiMessage> Contents,
+    GeminiSystemInstruction SystemInstruction,
+    GeminiGenerationConfig GenerationConfig
+);
+
+public record GeminiMessage(string Role, List<GeminiPart> Parts);
+public record GeminiPart(string Text);
+public record GeminiSystemInstruction(List<GeminiPart> Parts);
+public record GeminiGenerationConfig(int MaxOutputTokens, double Temperature);
+
+// Response
+public record GeminiResponse(List<GeminiCandidate> Candidates);
+public record GeminiCandidate(GeminiContent Content);
+public record GeminiContent(List<GeminiPart> Parts, string Role);
