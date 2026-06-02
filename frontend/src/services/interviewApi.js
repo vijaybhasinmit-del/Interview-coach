@@ -1,5 +1,5 @@
 // src/services/interviewApi.js
-const BASE = 'http://localhost:5000/api/interview'
+const BASE = 'https://localhost:57767/api/interview'
 
 export async function startSession({ resume, jobDescription, candidateName }) {
   const res = await fetch(`${BASE}/start`, {

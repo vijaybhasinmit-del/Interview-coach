@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|c:\\users\\vijay\\documents\\github\\interview-coach\\backend\\controllers\\interviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|solutionrelative:controllers\\interviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|c:\\users\\vijay\\documents\\github\\interview-coach\\backend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|c:\\users\\vijay\\documents\\github\\interview-coach\\backend\\services\\claudeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|solutionrelative:services\\claudeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|c:\\users\\vijay\\documents\\github\\interview-coach\\backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|c:\\users\\vijay\\documents\\github\\interview-coach\\backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|c:\\users\\vijay\\documents\\github\\interview-coach\\backend\\controllers\\interviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{493E383A-626B-0C61-3E12-FF8F6191E01D}|InterviewCoach.csproj|solutionrelative:controllers\\interviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,8 +30,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-06-02T05:08:48.759Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA4AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T04:46:40.572Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -32,33 +66,33 @@
               "RelativeDocumentMoniker": "Services\\ClaudeService.cs",
               "ToolTip": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\Services\\ClaudeService.cs",
               "RelativeToolTip": "Services\\ClaudeService.cs",
-              "ViewState": "AgIAAKgAAAAAAAAAAAAiwLUAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAJ8AAAAAAAAAAAAuwLUAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-02T03:14:06.153Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
               "ToolTip": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2026-06-01T19:24:07.973Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "InterviewController.cs",
               "DocumentMoniker": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\Controllers\\InterviewController.cs",
               "RelativeDocumentMoniker": "Controllers\\InterviewController.cs",
               "ToolTip": "C:\\Users\\Vijay\\Documents\\GitHub\\Interview-coach\\backend\\Controllers\\InterviewController.cs",
               "RelativeToolTip": "Controllers\\InterviewController.cs",
-              "ViewState": "AgIAAHUAAAAAAAAAAAAUwIUAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAzwIUAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-01T19:20:56.863Z",
               "EditorCaption": ""
